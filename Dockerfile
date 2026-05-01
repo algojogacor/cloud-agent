@@ -9,9 +9,8 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# ── Install nanobot ────────────────────────────
-COPY nanobot_src/ /tmp/nanobot_src/
-RUN uv pip install --system --no-cache /tmp/nanobot_src/
+# ── Install nanobot from PyPI ────────────────────────────
+RUN uv pip install --system --no-cache nanobot-ai
 
 # ── MCP server deps ─────────────────────────────────────
 COPY mcp-servers/brave-search/requirements.txt /tmp/brave-req.txt
@@ -39,7 +38,14 @@ ENV NANOBOT_CONFIG=/etc/nanobot/config.json
 
 USER root
 # ── Prebuild WhatsApp Bridge ────────────────────────────
-RUN python -c "from nanobot.channels.whatsapp import _ensure_bridge_setup; _ensure_bridge_setup()"
+RUN python -c "import subprocess, sys; \
+from nanobot.channels.whatsapp import _ensure_bridge_setup; \
+try: \
+  _ensure_bridge_setup(); \
+except subprocess.CalledProcessError as e: \
+  out = e.stderr.decode() if getattr(e, 'stderr', None) else e.stdout.decode() if getattr(e, 'stdout', None) else str(e); \
+  print('NPM ERROR:', out, file=sys.stderr); \
+  sys.exit(1)"
 
 RUN chown -R nanobot:nanobot /home/nanobot/.nanobot
 USER nanobot
