@@ -19,7 +19,7 @@ def _enabled() -> bool:
 
 
 def _log(message: str) -> None:
-    print(f"[supabase-auth] {message}", flush=True)
+    print(f"[supabase-sync] {message}", flush=True)
 
 
 def _client() -> Client:
@@ -35,11 +35,11 @@ def _bucket_name() -> str:
 
 
 def _object_path() -> str:
-    return _env("SUPABASE_AUTH_OBJECT", "whatsapp-auth/auth.zip")
+    return _env("SUPABASE_WORKSPACE_OBJECT", "nanobot/workspace.zip")
 
 
-def _auth_dir() -> Path:
-    return Path(_env("AUTH_DIR", "/app/data/whatsapp-auth"))
+def _sync_root() -> Path:
+    return Path(_env("SUPABASE_SYNC_ROOT", "/app/data"))
 
 
 def _ensure_bucket(client: Client) -> None:
@@ -55,13 +55,23 @@ def _ensure_bucket(client: Client) -> None:
     _log(f"created bucket '{bucket}'")
 
 
-def restore_auth() -> int:
+def _safe_remove_dir(path: Path) -> None:
+    if not path.exists():
+        return
+    for child in path.iterdir():
+        if child.is_dir():
+            shutil.rmtree(child)
+        else:
+            child.unlink()
+
+
+def restore_workspace() -> int:
     if not _enabled():
         _log("skipping restore because Supabase Storage is not configured")
         return 0
 
-    auth_dir = _auth_dir()
-    auth_dir.mkdir(parents=True, exist_ok=True)
+    sync_root = _sync_root()
+    sync_root.mkdir(parents=True, exist_ok=True)
     client = _client()
     bucket = _bucket_name()
     object_path = _object_path()
@@ -69,36 +79,40 @@ def restore_auth() -> int:
     try:
         blob = client.storage.from_(bucket).download(object_path)
     except Exception as exc:  # noqa: BLE001
-        _log(f"no remote auth backup found at '{bucket}/{object_path}': {exc}")
+        _log(f"no remote workspace backup found at '{bucket}/{object_path}': {exc}")
         return 0
 
-    with tempfile.TemporaryDirectory(prefix="wa-auth-restore-") as temp_dir:
-        archive_path = Path(temp_dir) / "auth.zip"
+    with tempfile.TemporaryDirectory(prefix="workspace-restore-") as temp_dir:
+        archive_path = Path(temp_dir) / "workspace.zip"
         archive_path.write_bytes(blob)
 
         restored_dir = Path(temp_dir) / "restored"
         shutil.unpack_archive(str(archive_path), str(restored_dir), "zip")
 
-        if auth_dir.exists():
-            shutil.rmtree(auth_dir)
-        shutil.copytree(restored_dir, auth_dir)
+        _safe_remove_dir(sync_root)
+        for item in restored_dir.iterdir():
+            target = sync_root / item.name
+            if item.is_dir():
+                shutil.copytree(item, target)
+            else:
+                shutil.copy2(item, target)
 
-    _log(f"restored auth from '{bucket}/{object_path}'")
+    _log(f"restored workspace from '{bucket}/{object_path}'")
     return 0
 
 
-def backup_auth() -> int:
+def backup_workspace() -> int:
     if not _enabled():
         _log("skipping backup because Supabase Storage is not configured")
         return 0
 
-    auth_dir = _auth_dir()
-    if not auth_dir.exists():
-        _log(f"skipping backup because auth dir does not exist: {auth_dir}")
+    sync_root = _sync_root()
+    if not sync_root.exists():
+        _log(f"skipping backup because sync root does not exist: {sync_root}")
         return 0
 
-    if not any(auth_dir.iterdir()):
-        _log(f"skipping backup because auth dir is empty: {auth_dir}")
+    if not any(sync_root.iterdir()):
+        _log(f"skipping backup because sync root is empty: {sync_root}")
         return 0
 
     client = _client()
@@ -106,9 +120,11 @@ def backup_auth() -> int:
     bucket = _bucket_name()
     object_path = _object_path()
 
-    with tempfile.TemporaryDirectory(prefix="wa-auth-backup-") as temp_dir:
-        archive_base = Path(temp_dir) / "auth"
-        archive_path = Path(shutil.make_archive(str(archive_base), "zip", root_dir=auth_dir))
+    with tempfile.TemporaryDirectory(prefix="workspace-backup-") as temp_dir:
+        archive_base = Path(temp_dir) / "workspace"
+        archive_path = Path(
+            shutil.make_archive(str(archive_base), "zip", root_dir=sync_root)
+        )
 
         with archive_path.open("rb") as handle:
             client.storage.from_(bucket).upload(
@@ -117,7 +133,7 @@ def backup_auth() -> int:
                 file_options={"content-type": "application/zip", "upsert": "true"},
             )
 
-    _log(f"uploaded auth backup to '{bucket}/{object_path}'")
+    _log(f"uploaded workspace backup to '{bucket}/{object_path}'")
     return 0
 
 
@@ -127,8 +143,8 @@ def main(argv: list[str]) -> int:
         return 2
 
     if argv[1] == "restore":
-        return restore_auth()
-    return backup_auth()
+        return restore_workspace()
+    return backup_workspace()
 
 
 if __name__ == "__main__":

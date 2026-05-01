@@ -8,7 +8,7 @@ Bot WhatsApp 24/7 di Koyeb (free tier) — riset internet (Perplexity native sea
 - **Multi-Provider**: DeepSeek (5 keys) → Perplexity (native search) → Groq → Qwen
 - **Search**: Perplexity sonar/sonar-pro built-in web search (no MCP needed)
 - **WhatsApp Bot**: Chat interface
-- **Auth Persistence**: Supabase Storage backup for WhatsApp session
+- **Persistence**: Supabase Storage backup for the whole nanobot workspace
 - **Zero Cost**: Semua free tier
 
 ## 📁 Structure
@@ -79,14 +79,15 @@ PERPLEXITY_API_KEY_2=pplx-xxx
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 SUPABASE_STORAGE_BUCKET=nanobot-private
-SUPABASE_AUTH_OBJECT=whatsapp-auth/auth.zip
+SUPABASE_WORKSPACE_OBJECT=nanobot/workspace.zip
 ```
 
 ### Supabase Notes
 
-- Supabase Storage is used to restore and back up the WhatsApp auth folder automatically.
-- On first boot, scan the QR code once. After that, the session is synced to Supabase every few minutes and again on shutdown.
-- `SUPABASE_DB_URL` is optional right now. This repo does not yet use Postgres as nanobot's primary memory backend.
+- Supabase Storage is used to restore and back up the whole `/app/data` workspace automatically.
+- This includes WhatsApp auth, nanobot memory, sessions, and generated workspace files.
+- On first boot, scan the QR code once. After that, the restored workspace should keep the session and memory across restarts.
+- `SUPABASE_DB_URL` is optional right now. This repo still persists state as files, but those files are synced to Supabase.
 
 ## 🆓 Cost
 
