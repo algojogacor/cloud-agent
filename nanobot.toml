@@ -71,6 +71,7 @@ prio = 7
 # - Search tasks: Perplexity first (native search) → DeepSeek → Groq
 # - General tasks: DeepSeek rotation → Perplexity → Groq → Qwen
 [model.default]
+chat_model = ["deepseek-1", "deepseek-2", "deepseek-3", "deepseek-4", "deepseek-5", "perplexity-1", "groq"]
 tool_model = ["perplexity-1", "perplexity-2", "deepseek-1", "deepseek-2", "deepseek-3", "deepseek-4", "deepseek-5", "groq", "qwen"]
 doc_model = ["deepseek-1", "deepseek-2", "deepseek-3", "deepseek-4", "deepseek-5", "perplexity-1", "groq"]
 check_model = ["groq", "qwen"]
@@ -146,5 +147,5 @@ enable_mention = true
 # ============================================
 
 [server]
-port = 18790
+port = 3000
 host = "0.0.0.0"
