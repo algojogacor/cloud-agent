@@ -37,16 +37,6 @@ ENV HOME=/home/nanobot
 ENV NANOBOT_CONFIG=/etc/nanobot/config.json
 
 USER root
-# ── Prebuild WhatsApp Bridge ────────────────────────────
-RUN python -c "import subprocess, sys; \
-from nanobot.channels.whatsapp import _ensure_bridge_setup; \
-try: \
-  _ensure_bridge_setup(); \
-except subprocess.CalledProcessError as e: \
-  out = e.stderr.decode() if getattr(e, 'stderr', None) else e.stdout.decode() if getattr(e, 'stdout', None) else str(e); \
-  print('NPM ERROR:', out, file=sys.stderr); \
-  sys.exit(1)"
-
 RUN chown -R nanobot:nanobot /home/nanobot/.nanobot
 USER nanobot
 
