@@ -21,7 +21,7 @@ RUN uv pip install --system --no-cache -r /tmp/brave-req.txt \
 COPY mcp-servers/ mcp-servers/
 
 # ── Config & entrypoint ─────────────────────────────────
-COPY nanobot.toml /etc/nanobot/config.toml
+COPY config.json /etc/nanobot/config.json
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
@@ -32,7 +32,7 @@ RUN useradd -m -u 1000 -s /bin/bash nanobot && \
 
 USER nanobot
 ENV HOME=/home/nanobot
-ENV NANOBOT_CONFIG=/etc/nanobot/config.toml
+ENV NANOBOT_CONFIG=/etc/nanobot/config.json
 
 EXPOSE 18790
 
