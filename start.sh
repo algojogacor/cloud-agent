@@ -28,8 +28,12 @@ echo "════════════════════════�
 export BRIDGE_PORT=${BRIDGE_PORT:-3001}
 export AUTH_DIR=${AUTH_DIR:-/app/data/whatsapp-auth}
 export BRIDGE_TOKEN=${BRIDGE_TOKEN:-koyeb-cloud-agent-secure}
+export SUPABASE_SYNC_INTERVAL_SECONDS=${SUPABASE_SYNC_INTERVAL_SECONDS:-300}
 
 mkdir -p "$AUTH_DIR"
+
+echo "☁️ Restoring WhatsApp auth from Supabase if available..."
+python /app/scripts/supabase_auth_sync.py restore || true
 
 if [ -d /app/bridge ] && [ -f /app/bridge/package.json ]; then
     echo "📱 Starting WhatsApp Bridge in background..."
@@ -46,10 +50,25 @@ else
     exit 1
 fi
 
+sync_auth_loop() {
+    while true; do
+        sleep "$SUPABASE_SYNC_INTERVAL_SECONDS"
+        python /app/scripts/supabase_auth_sync.py backup || true
+    done
+}
+
+echo "🔄 Starting periodic Supabase auth backup..."
+sync_auth_loop &
+SYNC_PID=$!
+
 # Trap untuk cleanup
 cleanup() {
     echo ""
     echo "🛑 Shutting down..."
+    if [ -n "${SYNC_PID:-}" ]; then
+        kill "$SYNC_PID" 2>/dev/null || true
+    fi
+    python /app/scripts/supabase_auth_sync.py backup || true
     exit 0
 }
 trap cleanup SIGTERM SIGINT

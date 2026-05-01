@@ -14,8 +14,8 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Install nanobot from PyPI.
-RUN uv pip install --system --no-cache nanobot-ai
+# Install nanobot runtime and Supabase client.
+RUN uv pip install --system --no-cache nanobot-ai supabase
 
 # MCP server deps.
 COPY mcp-servers/brave-search/requirements.txt /tmp/brave-req.txt
@@ -27,6 +27,7 @@ RUN uv pip install --system --no-cache -r /tmp/brave-req.txt \
 # MCP server code and bundled WhatsApp bridge.
 COPY mcp-servers/ mcp-servers/
 COPY bridge/ bridge/
+COPY scripts/ scripts/
 
 # Config and entrypoint.
 COPY config.json /etc/nanobot/config.json
