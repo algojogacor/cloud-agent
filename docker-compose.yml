@@ -1,0 +1,33 @@
+services:
+  cloud-agent:
+    build: .
+    container_name: cloud-agent
+    ports:
+      - "18790:18790"
+    environment:
+      # Telegram
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      
+      # DeepSeek Keys (5 for rotation)
+      - DEEPSEEK_API_KEY_1=${DEEPSEEK_API_KEY_1}
+      - DEEPSEEK_API_KEY_2=${DEEPSEEK_API_KEY_2}
+      - DEEPSEEK_API_KEY_3=${DEEPSEEK_API_KEY_3}
+      - DEEPSEEK_API_KEY_4=${DEEPSEEK_API_KEY_4}
+      - DEEPSEEK_API_KEY_5=${DEEPSEEK_API_KEY_5}
+      
+      # Perplexity (native search — no MCP needed)
+      - PERPLEXITY_API_KEY_1=${PERPLEXITY_API_KEY_1}
+      - PERPLEXITY_API_KEY_2=${PERPLEXITY_API_KEY_2}
+      
+      # Fallback providers
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - QWEN_API_KEY=${QWEN_API_KEY}
+      
+      # Config
+      - NANOBOT_PORT=18790
+      - MCP_BRAVE_PORT=9101
+      - MCP_GOOGLE_PORT=9102
+      - LOG_LEVEL=info
+    volumes:
+      - ./data:/app/data  # Persist SQLite memory
+    restart: unless-stopped

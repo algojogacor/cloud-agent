@@ -1,0 +1,149 @@
+# ============================================
+# Nanobot Configuration - Cloud Agent
+# Multi-provider with DeepSeek Key Rotation
+# ============================================
+
+[model.deepseek-1]
+provider = "openai"  # DeepSeek uses OpenAI-compatible API
+model = "deepseek-chat"
+api_key = "${DEEPSEEK_API_KEY_1}"
+base_url = "https://api.deepseek.com/v1"
+prio = 1
+
+[model.deepseek-2]
+provider = "openai"
+model = "deepseek-chat"
+api_key = "${DEEPSEEK_API_KEY_2}"
+base_url = "https://api.deepseek.com/v1"
+prio = 2
+
+[model.deepseek-3]
+provider = "openai"
+model = "deepseek-chat"
+api_key = "${DEEPSEEK_API_KEY_3}"
+base_url = "https://api.deepseek.com/v1"
+prio = 3
+
+[model.deepseek-4]
+provider = "openai"
+model = "deepseek-chat"
+api_key = "${DEEPSEEK_API_KEY_4}"
+base_url = "https://api.deepseek.com/v1"
+prio = 4
+
+[model.deepseek-5]
+provider = "openai"
+model = "deepseek-chat"
+api_key = "${DEEPSEEK_API_KEY_5}"
+base_url = "https://api.deepseek.com/v1"
+prio = 5
+
+[model.groq]
+provider = "openai"
+model = "llama-3.1-8b-instant"
+api_key = "${GROQ_API_KEY}"
+base_url = "https://api.groq.com/openai/v1"
+prio = 10
+
+[model.qwen]
+provider = "openai"
+model = "qwen-turbo"
+api_key = "${QWEN_API_KEY}"
+base_url = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+prio = 11
+
+# Perplexity — built-in web search, no MCP needed
+[model.perplexity-1]
+provider = "openai"
+model = "sonar"
+api_key = "${PERPLEXITY_API_KEY_1}"
+base_url = "https://api.perplexity.ai"
+prio = 6
+
+[model.perplexity-2]
+provider = "openai"
+model = "sonar-pro"
+api_key = "${PERPLEXITY_API_KEY_2}"
+base_url = "https://api.perplexity.ai"
+prio = 7
+
+# Default routing:
+# - Search tasks: Perplexity first (native search) → DeepSeek → Groq
+# - General tasks: DeepSeek rotation → Perplexity → Groq → Qwen
+[model.default]
+tool_model = ["perplexity-1", "perplexity-2", "deepseek-1", "deepseek-2", "deepseek-3", "deepseek-4", "deepseek-5", "groq", "qwen"]
+doc_model = ["deepseek-1", "deepseek-2", "deepseek-3", "deepseek-4", "deepseek-5", "perplexity-1", "groq"]
+check_model = ["groq", "qwen"]
+
+# ============================================
+# Memory Configuration
+# ============================================
+
+[memory]
+type = "sqlite"
+path = "/app/data/memory.db"
+
+# ============================================
+# Chat Apps
+# ============================================
+
+[app.telegram]
+token = "${TELEGRAM_BOT_TOKEN}"
+enable_mention = true
+
+# ============================================
+# MCP (Model Context Protocol) Servers
+# (Optional — Perplexity model has native search)
+# ============================================
+#
+# [[mcp]]
+# name = "brave-search"
+# type = "sse"
+# url = "http://localhost:9101/sse"
+#
+# [[mcp]]
+# name = "google-workspace"
+# type = "sse"
+# url = "http://localhost:9102/sse"
+
+# ============================================
+# Skills (Tool Groups)
+# ============================================
+
+[[skill]]
+name = "web_search"
+description = "Search the web using Brave Search"
+tools = ["brave-search:brave_web_search", "brave-search:brave_news_search"]
+
+[[skill]]
+name = "news"
+description = "Get latest news"
+tools = ["brave-search:brave_news_search"]
+
+[[skill]]
+name = "google_docs"
+description = "Read and write Google Docs"
+tools = ["google-workspace:docs_read", "google-workspace:docs_write", "google-workspace:docs_append"]
+
+[[skill]]
+name = "google_sheets"
+description = "Manage Google Sheets"
+tools = ["google-workspace:sheets_read", "google-workspace:sheets_write"]
+
+# ============================================
+# Scheduled Tasks (Cron)
+# ============================================
+
+# Example: Daily briefing at 9 AM
+# [[cron]]
+# name = "morning-brief"
+# schedule = "0 9 * * *"
+# prompt = "Search for latest AI/tech news and send summary to user"
+
+# ============================================
+# Server Settings
+# ============================================
+
+[server]
+port = 18790
+host = "0.0.0.0"
