@@ -12,6 +12,9 @@ mkdir -p /home/nanobot/.nanobot
 cp /etc/nanobot/config.json /home/nanobot/.nanobot/config.json
 
 export NANOBOT_PORT=${NANOBOT_PORT:-3000}
+export NANOBOT_GATEWAY__PORT=${NANOBOT_GATEWAY__PORT:-$NANOBOT_PORT}
+export NANOBOT_GATEWAY__HOST=${NANOBOT_GATEWAY__HOST:-0.0.0.0}
+export NANOBOT_AGENTS__DEFAULTS__WORKSPACE=${NANOBOT_AGENTS__DEFAULTS__WORKSPACE:-/app/data}
 
 echo "📁 Data directory: /app/data"
 echo "🔌 Nanobot port: $NANOBOT_PORT"
