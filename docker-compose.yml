@@ -3,7 +3,7 @@ services:
     build: .
     container_name: cloud-agent
     ports:
-      - "3000:3000"
+      - "18790:18790"
     environment:
       # DeepSeek Keys (5 for rotation)
       - DEEPSEEK_API_KEY_1=${DEEPSEEK_API_KEY_1}
@@ -29,7 +29,7 @@ services:
       - QWEN_API_KEY=${QWEN_API_KEY}
       
       # Config
-      - NANOBOT_PORT=3000
+      - NANOBOT_PORT=18790
       - MCP_BRAVE_PORT=9101
       - MCP_GOOGLE_PORT=9102
       - LOG_LEVEL=info

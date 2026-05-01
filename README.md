@@ -63,7 +63,7 @@ docker-compose up --build
 2. Create Koyeb Service: GitHub → repo → branch `cloud-agent`
 3. Builder: **Dockerfile**
 4. Instance: **Free** (0.1 vCPU, 512MB RAM)
-5. Port: **3000**
+5. Port: **18790**
 6. Env vars — copy from `.env`:
 
 ```

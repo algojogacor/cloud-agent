@@ -10,7 +10,7 @@ echo ""
 mkdir -p /app/data
 mkdir -p /home/nanobot/.nanobot
 
-export NANOBOT_PORT=${NANOBOT_PORT:-3000}
+export NANOBOT_PORT=${NANOBOT_PORT:-18790}
 export NANOBOT_GATEWAY_HOST=${NANOBOT_GATEWAY_HOST:-0.0.0.0}
 export NANOBOT_WORKSPACE_PATH=${NANOBOT_WORKSPACE_PATH:-/app/data}
 export NANOBOT_RUNTIME_CONFIG=${NANOBOT_RUNTIME_CONFIG:-/home/nanobot/.nanobot/config.json}

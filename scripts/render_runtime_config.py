@@ -55,7 +55,7 @@ def main() -> int:
         },
         "gateway": {
             "host": env("NANOBOT_GATEWAY_HOST", "0.0.0.0"),
-            "port": int(env("NANOBOT_PORT", "3000")),
+            "port": int(env("NANOBOT_PORT", "18790")),
         },
     }
 
