@@ -9,7 +9,7 @@ echo ""
 # Buat data directory untuk SQLite
 mkdir -p /app/data
 
-export NANOBOT_PORT=${NANOBOT_PORT:-18790}
+export NANOBOT_PORT=${NANOBOT_PORT:-3000}
 
 echo "📁 Data directory: /app/data"
 echo "🔌 Nanobot port: $NANOBOT_PORT"

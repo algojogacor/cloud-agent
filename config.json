@@ -22,12 +22,13 @@
   },
   "channels": {
     "telegram": {
+      "enabled": true,
       "token": "${TELEGRAM_BOT_TOKEN}",
       "enable_mention": true
     }
   },
   "gateway": {
     "host": "0.0.0.0",
-    "port": 18790
+    "port": 3000
   }
 }

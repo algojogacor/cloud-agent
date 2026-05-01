@@ -34,6 +34,6 @@ USER nanobot
 ENV HOME=/home/nanobot
 ENV NANOBOT_CONFIG=/etc/nanobot/config.json
 
-EXPOSE 18790
+EXPOSE 3000
 
 ENTRYPOINT ["/usr/local/bin/start.sh"]
