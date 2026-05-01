@@ -108,27 +108,28 @@ enable_mention = true
 
 # ============================================
 # Skills (Tool Groups)
+# Disabled — MCP servers must be running for these
 # ============================================
 
-[[skill]]
-name = "web_search"
-description = "Search the web using Brave Search"
-tools = ["brave-search:brave_web_search", "brave-search:brave_news_search"]
+# [[skill]]
+# name = "web_search"
+# description = "Search the web using Brave Search"
+# tools = ["brave-search:brave_web_search", "brave-search:brave_news_search"]
 
-[[skill]]
-name = "news"
-description = "Get latest news"
-tools = ["brave-search:brave_news_search"]
+# [[skill]]
+# name = "news"
+# description = "Get latest news"
+# tools = ["brave-search:brave_news_search"]
 
-[[skill]]
-name = "google_docs"
-description = "Read and write Google Docs"
-tools = ["google-workspace:docs_read", "google-workspace:docs_write", "google-workspace:docs_append"]
+# [[skill]]
+# name = "google_docs"
+# description = "Read and write Google Docs"
+# tools = ["google-workspace:docs_read", "google-workspace:docs_write", "google-workspace:docs_append"]
 
-[[skill]]
-name = "google_sheets"
-description = "Manage Google Sheets"
-tools = ["google-workspace:sheets_read", "google-workspace:sheets_write"]
+# [[skill]]
+# name = "google_sheets"
+# description = "Manage Google Sheets"
+# tools = ["google-workspace:sheets_read", "google-workspace:sheets_write"]
 
 # ============================================
 # Scheduled Tasks (Cron)
