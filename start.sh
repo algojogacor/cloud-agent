@@ -19,22 +19,32 @@ echo "   DeepSeek: $(echo $DEEPSEEK_API_KEY_1 | cut -c1-8)... (5 keys)"
 echo "   Perplexity: $(echo $PERPLEXITY_API_KEY_1 | cut -c1-8)... (2 keys - native search)"
 echo "   Groq: $(echo $GROQ_API_KEY | cut -c1-8)... (fallback)"
 echo "   Qwen: $(echo $QWEN_API_KEY | cut -c1-8)... (backup)"
-echo "   Telegram: token configured ✓"
+echo "   WhatsApp: public access enabled"
 echo ""
 
 echo "🤖 Starting Nanobot..."
 echo "═══════════════════════════════════════════════════"
 
-export BRIDGE_PORT=3001
-export AUTH_DIR=/app/data/whatsapp-auth
-export BRIDGE_TOKEN="koyeb-cloud-agent-secure"
+export BRIDGE_PORT=${BRIDGE_PORT:-3001}
+export AUTH_DIR=${AUTH_DIR:-/app/data/whatsapp-auth}
+export BRIDGE_TOKEN=${BRIDGE_TOKEN:-koyeb-cloud-agent-secure}
 
-echo "📱 Starting WhatsApp Bridge in background..."
-(cd /home/nanobot/.nanobot/bridge && npm start) &
+mkdir -p "$AUTH_DIR"
 
-# Give the bridge a moment to initialize
-sleep 3
-echo ""
+if [ -d /app/bridge ] && [ -f /app/bridge/package.json ]; then
+    echo "📱 Starting WhatsApp Bridge in background..."
+    (
+        cd /app/bridge
+        npm start
+    ) &
+
+    # Give the bridge a moment to initialize
+    sleep 3
+    echo ""
+else
+    echo "❌ WhatsApp bridge source is missing at /app/bridge"
+    exit 1
+fi
 
 # Trap untuk cleanup
 cleanup() {

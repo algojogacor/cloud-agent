@@ -1,13 +1,13 @@
 # ☁️ Cloud Agent - Always-On AI Assistant
 
-Bot Telegram 24/7 di Koyeb (free tier) — riset internet (Perplexity native search), DeepSeek key rotation (5 keys auto-fallback).
+Bot WhatsApp 24/7 di Koyeb (free tier) — riset internet (Perplexity native search), DeepSeek key rotation (5 keys auto-fallback).
 
 ## 🚀 Features
 
 - **Always-On**: Jalan 24/7 di Koyeb free tier (512MB)
 - **Multi-Provider**: DeepSeek (5 keys) → Perplexity (native search) → Groq → Qwen
 - **Search**: Perplexity sonar/sonar-pro built-in web search (no MCP needed)
-- **Telegram Bot**: Chat interface
+- **WhatsApp Bot**: Chat interface
 - **Memory**: SQLite persistence
 - **Zero Cost**: Semua free tier
 
@@ -28,7 +28,6 @@ cloud-agent/
 ### 1. Prerequisites
 
 - Docker Desktop
-- Telegram Bot Token (@BotFather)
 - API keys (DeepSeek, Groq, Qwen, Perplexity)
 
 ### 2. Setup
@@ -47,9 +46,9 @@ docker-compose up --build
 
 ### 4. Test Bot
 
-- Buka Telegram, cari bot lo
-- Kirim: `/start`
-- Kirim: `Cari berita AI terbaru`
+- Jalankan container
+- Scan QR WhatsApp dari log bridge
+- Chat nomor yang terhubung
 
 ## 🐳 Deploy ke Koyeb
 
@@ -64,7 +63,7 @@ docker-compose up --build
 2. Create Koyeb Service: GitHub → repo → branch `cloud-agent`
 3. Builder: **Dockerfile**
 4. Instance: **Free** (0.1 vCPU, 512MB RAM)
-5. Port: **18790**
+5. Port: **3000**
 6. Env vars — copy from `.env`:
 
 ```
@@ -77,7 +76,6 @@ GROQ_API_KEY=gsk_xxx
 QWEN_API_KEY=sk-xxx
 PERPLEXITY_API_KEY_1=pplx-xxx
 PERPLEXITY_API_KEY_2=pplx-xxx
-TELEGRAM_BOT_TOKEN=xxx
 ```
 
 ## 🆓 Cost

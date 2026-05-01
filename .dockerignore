@@ -1,0 +1,9 @@
+.git
+.gitignore
+data
+nanobot_src
+nanobot_ai.zip
+bridge/node_modules
+bridge/dist
+__pycache__
+*.pyc

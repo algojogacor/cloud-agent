@@ -25,6 +25,7 @@
       "enabled": true,
       "bridgeUrl": "ws://127.0.0.1:3001",
       "bridgeToken": "koyeb-cloud-agent-secure",
+      "allowFrom": ["*"],
       "groupPolicy": "open"
     },
     "telegram": {
