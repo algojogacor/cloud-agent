@@ -36,8 +36,11 @@ USER nanobot
 ENV HOME=/home/nanobot
 ENV NANOBOT_CONFIG=/etc/nanobot/config.json
 
+USER root
 # ── Prebuild WhatsApp Bridge ────────────────────────────
 RUN python -c "from nanobot.channels.whatsapp import _ensure_bridge_setup; _ensure_bridge_setup()"
+RUN chown -R nanobot:nanobot /home/nanobot/.nanobot
+USER nanobot
 
 EXPOSE 3000
 
