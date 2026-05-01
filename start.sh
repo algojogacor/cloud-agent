@@ -9,12 +9,11 @@ echo ""
 # Buat data directory untuk SQLite
 mkdir -p /app/data
 mkdir -p /home/nanobot/.nanobot
-cp /etc/nanobot/config.json /home/nanobot/.nanobot/config.json
 
 export NANOBOT_PORT=${NANOBOT_PORT:-3000}
-export NANOBOT_GATEWAY__PORT=${NANOBOT_GATEWAY__PORT:-$NANOBOT_PORT}
-export NANOBOT_GATEWAY__HOST=${NANOBOT_GATEWAY__HOST:-0.0.0.0}
-export NANOBOT_AGENTS__DEFAULTS__WORKSPACE=${NANOBOT_AGENTS__DEFAULTS__WORKSPACE:-/app/data}
+export NANOBOT_GATEWAY_HOST=${NANOBOT_GATEWAY_HOST:-0.0.0.0}
+export NANOBOT_WORKSPACE_PATH=${NANOBOT_WORKSPACE_PATH:-/app/data}
+export NANOBOT_RUNTIME_CONFIG=${NANOBOT_RUNTIME_CONFIG:-/home/nanobot/.nanobot/config.json}
 
 echo "📁 Data directory: /app/data"
 echo "🔌 Nanobot port: $NANOBOT_PORT"
@@ -35,6 +34,8 @@ export AUTH_DIR=${AUTH_DIR:-/app/data/whatsapp-auth}
 export BRIDGE_TOKEN=${BRIDGE_TOKEN:-koyeb-cloud-agent-secure}
 export SUPABASE_SYNC_INTERVAL_SECONDS=${SUPABASE_SYNC_INTERVAL_SECONDS:-300}
 export SUPABASE_SYNC_ROOT=${SUPABASE_SYNC_ROOT:-/app/data}
+
+python /app/scripts/render_runtime_config.py
 
 mkdir -p "$SUPABASE_SYNC_ROOT"
 
