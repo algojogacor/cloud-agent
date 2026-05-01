@@ -73,6 +73,7 @@ def restore_workspace() -> int:
     sync_root = _sync_root()
     sync_root.mkdir(parents=True, exist_ok=True)
     client = _client()
+    _ensure_bucket(client)
     bucket = _bucket_name()
     object_path = _object_path()
 

@@ -8,6 +8,8 @@ echo ""
 
 # Buat data directory untuk SQLite
 mkdir -p /app/data
+mkdir -p /home/nanobot/.nanobot
+cp /etc/nanobot/config.json /home/nanobot/.nanobot/config.json
 
 export NANOBOT_PORT=${NANOBOT_PORT:-3000}
 
@@ -75,4 +77,4 @@ cleanup() {
 }
 trap cleanup SIGTERM SIGINT
 
-exec nanobot gateway --config "${NANOBOT_CONFIG:-/etc/nanobot/config.json}"
+exec nanobot gateway
