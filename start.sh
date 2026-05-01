@@ -33,4 +33,4 @@ cleanup() {
 }
 trap cleanup SIGTERM SIGINT
 
-exec nanobot
+exec nanobot gateway
