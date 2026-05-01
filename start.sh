@@ -33,4 +33,4 @@ cleanup() {
 }
 trap cleanup SIGTERM SIGINT
 
-exec nanobot gateway
+exec nanobot gateway --config "${NANOBOT_CONFIG:-/etc/nanobot/config.json}"
