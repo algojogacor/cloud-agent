@@ -3,6 +3,8 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 # ── Minimal system deps ──────────────────────────────────
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl ca-certificates && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -33,6 +35,9 @@ RUN useradd -m -u 1000 -s /bin/bash nanobot && \
 USER nanobot
 ENV HOME=/home/nanobot
 ENV NANOBOT_CONFIG=/etc/nanobot/config.json
+
+# ── Prebuild WhatsApp Bridge ────────────────────────────
+RUN python -c "from nanobot.channels.whatsapp import _ensure_bridge_setup; _ensure_bridge_setup()"
 
 EXPOSE 3000
 

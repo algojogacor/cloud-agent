@@ -25,6 +25,17 @@ echo ""
 echo "🤖 Starting Nanobot..."
 echo "═══════════════════════════════════════════════════"
 
+export BRIDGE_PORT=3001
+export AUTH_DIR=/app/data/whatsapp-auth
+export BRIDGE_TOKEN="koyeb-cloud-agent-secure"
+
+echo "📱 Starting WhatsApp Bridge in background..."
+(cd /home/nanobot/.nanobot/bridge && npm start) &
+
+# Give the bridge a moment to initialize
+sleep 3
+echo ""
+
 # Trap untuk cleanup
 cleanup() {
     echo ""
