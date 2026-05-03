@@ -1,4 +1,4 @@
-# ☁️ Cloud Agent - Always-On AI Assistant
+# ☁️ Cloud Agent - Always-On Assistant
 
 Bot WhatsApp 24/7 di Koyeb (free tier) — riset internet (Perplexity native search), DeepSeek key rotation (5 keys auto-fallback).
 
